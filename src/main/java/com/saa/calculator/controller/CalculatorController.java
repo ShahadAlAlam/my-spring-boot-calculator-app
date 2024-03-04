@@ -3,13 +3,26 @@ package com.saa.calculator.controller;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 public class CalculatorController {
     @GetMapping(value = "/home")
-    public String getHome(String[] args) {
-        return "Welcome to Calculation Home";
+    public String getHome() throws FileNotFoundException {
+        String rootPath = System.getProperty("user.dir");
+        System.out.println(rootPath+"/README.md");
+        File obj = new File(rootPath+"/README.md");
+        InputStream in = new FileInputStream(obj);
+
+        String sData = new BufferedReader(
+                new InputStreamReader(in, StandardCharsets.UTF_8))
+                .lines()
+                .collect(Collectors.joining("\n"));
+
+        return sData;
     }
 
     @PostMapping(value = "/add")
